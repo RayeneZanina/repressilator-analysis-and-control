@@ -1,9 +1,9 @@
-# Analysis of synthetic repressillator system under PID control
+# Analysis of synthetic repressilator system under PID control
 
 
 This project studies the dynamics of a synthetic repressilator gene circuit under external control input \(u(t)\), and analyzes how feedback control can regulate oscillatory behavior near a Hopf bifurcation.
 
-For this project, we analyze a 3-gene repressillator system with control input $\(u(t)\)$:
+For this project, we analyze a 3-gene repressilator system with control input $\(u(t)\)$:
 
 $\dot{P}_1 =u(t) \frac{\alpha}{1 + P_3^n} - \gamma P_1$
 
