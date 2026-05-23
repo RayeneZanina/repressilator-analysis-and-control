@@ -38,7 +38,7 @@ The eigenvalues are then $\lambda_k = -\gamma + \beta(u) e^{i\frac{(2k+1)\pi}{3}
 
 We note that $\lambda_1 = -\gamma -\beta(u)$ is real, and $\lambda_{0,2} = -\gamma + \frac{\beta(u)}{2} \pm i \frac{\sqrt{3}}{2} \beta(u)$ are complex conjugate pairs. Hopf bifurcation occurs when the complex conjugate pairs become purely imaginary, meaning $\Re(\lambda_{0,2}) = 0$, which leads to the critical value of $\beta(u)$, $\beta_c = 2\gamma$
 
-An important thing to note is that, since we have introduced time-varying control, the parameter $\beta$ is now a function of time and and subsequently eigenvalues evolve through time. This leads to local time-varying stability regimes relative to the Hopf bifurcation threshold. We analyze the system by treating the control value as a constant for each timestep in the simulation.
+An important thing to note is that, since we have introduced time-varying control, the parameter $\beta$ is now a function of time and and subsequently eigenvalues evolve through time. This leads to local time-varying stability regimes relative to the Hopf bifurcation threshold.
 
 We use a PID controller for the control input. We define the error as $e(t) = P_1(t) - P_{eq}$
 
