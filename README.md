@@ -30,7 +30,7 @@ J =
 \end{bmatrix}
 $$
 
-where $\beta(u) = u \frac{\partial}{\partial{P}} (\frac{\alpha}{1 + P^n}) |\_{P = P_{eq}}$
+where $\beta(u) = -u \frac{\partial}{\partial{P}} (\frac{\alpha}{1 + P^n}) |\_{P = P_{eq}} = u \frac{\alpha n P_{eq}^{n-1}}{(1 + P_{eq}^n)^2}$. The negative sign is added to ensure $\beta > 0$
 
 To determine the eigenvalues of the linear system, we solve the following equation $\det(J - \lambda I) = 0$. We obtain $\lambda + \gamma = \beta(u) (-1)^{\frac{1}{3}}$
 
