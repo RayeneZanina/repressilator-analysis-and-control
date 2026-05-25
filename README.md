@@ -1,0 +1,92 @@
+# Analysis of synthetic repressilator system under regime control
+
+
+This project studies the dynamics of a synthetic repressilator gene circuit under external control input \(u(t)\), and analyzes how feedback control can regulate oscillatory behavior near a Hopf bifurcation.
+
+For this project, we analyze a 3-gene repressilator system with control input $\(u(t)\)$:
+
+$\dot{P}_1 =u(t) \frac{\alpha}{1 + P_3^n} - \gamma P_1$
+
+$\dot{P}_2 =u(t) \frac{\alpha}{1 + P_1^n}- \gamma P_2$
+
+$\dot{P}_3 =u(t) \frac{\alpha}{1 + P_2^n}- \gamma P_3$
+
+Note that, we assume the control input changes the rate at which the protein is produced in a multiplicative way. We assume the control is between 0.2 and 5. 
+
+We define $x = \[P_1, P_2, P_3\]$. Therefore, $x = f(x, u)$
+
+To find the equilibrium points, we assume symmetry $P_{eq} = P_1 = P_2 = P_3$
+
+The equilibrium points are then given by the implicit relation $\gamma P_{eq} (1 + P_{eq}^n) = u(t) \alpha$. We note that $P_{eq}$ is a function of $u(t)$.
+
+We then linearize near the equilibrium point by defining a perturbation $\delta x = x - x_{eq}$
+
+We obtain the linear system $\delta \dot{x} = J(x_{eq}) \delta x$ where $J = \frac{\partial{f}}{\partial{x}} |\_{x = x_{eq}}$. We obtain the following matrix
+
+$$
+J =
+\begin{bmatrix}
+-\gamma & 0 & -\beta(u) \\
+-\beta(u) & -\gamma & 0 \\
+0 & -\beta(u) & -\gamma
+\end{bmatrix}
+$$
+
+where $\beta(u) = -u \frac{\partial}{\partial{P}} (\frac{\alpha}{1 + P^n}) |\_{P = P_{eq}} = u \frac{\alpha n P_{eq}^{n-1}}{(1 + P_{eq}^n)^2}$. The negative sign is added to ensure $\beta > 0$
+
+To determine the eigenvalues of the linear system, we solve the following equation $\det(J - \lambda I) = 0$. We obtain $\lambda + \gamma = \beta(u) (-1)^{\frac{1}{3}}$
+
+The eigenvalues are then $\lambda_k = -\gamma + \beta(u) e^{i\frac{(2k+1)\pi}{3}}, k = 0, 1, 2$
+
+We note that $\lambda_1 = -\gamma -\beta(u)$ is real, and $\lambda_{0,2} = -\gamma + \frac{\beta(u)}{2} \pm i \frac{\sqrt{3}}{2} \beta(u)$ are complex conjugate pairs. Hopf bifurcation occurs when the complex conjugate pairs become purely imaginary, meaning $\Re(\lambda_{0,2}) = 0$, which leads to the critical value of $\beta(u)$, $\beta_c = 2\gamma$
+
+An important thing to note is that, since we have introduced time-varying control, the parameter $\beta$ is now a function of time and and subsequently eigenvalues evolve through time. This leads to local time-varying stability regimes relative to the Hopf bifurcation threshold.
+
+The controller will then try to keep the regime close to the Hopf bifurcation boundary, slightly above it so that the oscillations do not die out. For this, we use a PID controller. Note that this controller will be regulating the parameter $u$, and has access to information directly from the system that is not accessible in real conditions. There might be ways to infer the parameters from the evolution of the system, or design a control law that doesn't need the information, but for now I just want to see if there is a way to control systems to produce an oscillatory behaviour. 
+
+For the PID, we define a quantity for the regime $r(u) = \beta(u) - 2 \gamma$. The controller gets this information from the system, which again is not possible, but we will accept this for now. The error is then defined as $e = r(u) - r_{target}$ where $r_{target}$ can be manually decided, but should be positive and small. Note that, we are using the equation we derived that characterizes the regime, but it is only an approximation. That equation is only valid locally near the equilibrium point, but away from that point, the non-linearity makes the system less predictable. 
+
+Another important point is the function $\beta(u)$. It's hard to tell what it looks like just by looking at it, considering $P_{eq}$ is itself a function of $u$ given by an implicit relation. I first investigated the function with different parameters, and the function has a horizontal asymptote that depends on $\gamma$ and $n$. $\alpha$ determines how fast the function increases. This means that, for some sets of parameters, $\beta(u)$ never exceeds $2 \gamma$, which means the system can never oscillate.
+
+<img width="582" height="455" alt="image" src="https://github.com/user-attachments/assets/3cdacf6b-914c-4fbb-8be5-58fb17aaf43e" />
+
+We can then determine the region in parameter space for which the system under control can oscillate and where it cannot.
+
+<img width="1572" height="746" alt="image" src="https://github.com/user-attachments/assets/89733115-eb65-4584-bda2-ffc0d6031821" />
+
+We then simulate a system without the controller in the region of the parameter space that allows for oscillations.
+
+<img width="567" height="455" alt="image" src="https://github.com/user-attachments/assets/9d7bc280-0926-4c3b-b010-4ac06d67057b" />
+<img width="2396" height="855" alt="image" src="https://github.com/user-attachments/assets/69e90e1d-8937-4e45-9366-84b8b87d19fe" />
+
+We then add the controller and simulate the system. We notice that the system reaches a limit cycle and is able to oscillate. 
+
+<img width="567" height="455" alt="image" src="https://github.com/user-attachments/assets/1b37defb-ab71-4307-aca8-b89d9ec6fe5c" />
+<img width="2396" height="855" alt="image" src="https://github.com/user-attachments/assets/f61ddf81-1318-499b-a903-f0a1eb1c5442" />
+
+We can use Fast Fourier Transform to characterize how the system oscillates and extract the dominant frequency. $r_{target}$ changes the frequency as well as the amplitude of the oscillations.
+
+<img width="622" height="547" alt="image" src="https://github.com/user-attachments/assets/bcf0cce7-51ec-441d-b753-e0b5e717a4a9" />
+
+Although the controller is able to maintain the oscillations, all it does is actually maintain the control at the critical value, and simply computing the critical value and making it a constant leads to the same behaviour. However, the model might be imperfect, and the parameters might change. Using the initial critical value as a constant leads to slight decay of the oscillations, although the system does manage to maintain its oscillatory behaviour. 
+
+<img width="567" height="455" alt="image" src="https://github.com/user-attachments/assets/a4efeea3-adb7-4ba5-a4dc-8f112dc68ca3" />
+
+The regime indicator shows many instances where the Hopf bifurcation boundary is crossed and the regime indicator becomes negative, indicating decay of the oscillations. Note that this means decay of the oscillations if the parameters are kept constant, however we can imagine that over time, repeated crossing of the boundary might lead to the oscillations slowly decaying. 
+
+<img width="578" height="455" alt="image" src="https://github.com/user-attachments/assets/1fd407c1-fdc6-4c8e-bd4a-3a2f343802a3" />
+
+Now, we add the controller. We notice that the system is able to maintain its oscillations pretty well.
+
+<img width="567" height="455" alt="image" src="https://github.com/user-attachments/assets/603d879b-775f-4894-9480-6709b7bce3ce" />
+
+The regime indicator shows a much more stable regime, in the sense that it becomes negative less often and stays closer to $r_{target}$
+
+<img width="587" height="455" alt="image" src="https://github.com/user-attachments/assets/51c2a765-121d-48b7-b191-eefe7beb32e7" />
+
+
+
+
+
+
+
