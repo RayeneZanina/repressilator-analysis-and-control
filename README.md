@@ -50,7 +50,7 @@ Another important point is the function $\beta(u)$. It's hard to tell what it lo
 
 To prove this, we determine $\lim\limits_{u \to \infty}\beta(u)$. For this we need to determine $\lim\limits_{u \to \infty}P_{eq}(u)$. We know that $\gamma P_{eq} (1 + P_{eq}^n) = u \alpha$. Assume $P_{eq}$ is bounded above by $M, M \in ℝ$. The left sign of the equation is then bounded by $\gamma M (1 + M^n)$ as the right side goes to infinity as $u \to \infty$, which creates a contradiction. Therefore, $\lim\limits_{u \to \infty}P_{eq}(u) = \infty$. We can then substitute $u$
 
-$$\beta = u \frac{\alpha n P_{eq}^{n-1}}{(1 + P_{eq}^n)^2} = \frac{\gamma}{\alpha} P_{eq} (1 + P_{eq}^n) \frac{\alpha n P_{eq}^{n-1}}{(1 + P_{eq}^n)^2} = \frac{\gamma n P_{eq}^n}{1 + P_{eq}} $$
+$$\beta = u \frac{\alpha n P_{eq}^{n-1}}{(1 + P_{eq}^n)^2} = \frac{\gamma}{\alpha} P_{eq} (1 + P_{eq}^n) \frac{\alpha n P_{eq}^{n-1}}{(1 + P_{eq}^n)^2} = \frac{\gamma n P_{eq}^n}{1 + P_{eq}^n} $$
 
 $$\lim\limits_{u \to \infty}\beta(u) = \lim\limits_{P_{eq} \to \infty} \frac{\gamma n P_{eq}^n}{1 + P_{eq}}$$ can then easily be seen to be $\gamma n$, which means for $n<2$, the system will exist below the Hopf bifurcation boundary no matter the control input, and will never be able to maintain its oscillations.
 
