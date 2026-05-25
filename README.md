@@ -46,11 +46,17 @@ The controller will then try to keep the regime close to the Hopf bifurcation bo
 
 For the PID, we define a quantity for the regime $r(u) = \beta(u) - 2 \gamma$. The controller gets this information from the system, which again is not possible, but we will accept this for now. The error is then defined as $e = r(u) - r_{target}$ where $r_{target}$ can be manually decided, but should be positive and small. Note that, we are using the equation we derived that characterizes the regime, but it is only an approximation. That equation is only valid locally near the equilibrium point, but away from that point, the non-linearity makes the system less predictable. 
 
-Another important point is the function $\beta(u)$. It's hard to tell what it looks like just by looking at it, considering $P_{eq}$ is itself a function of $u$ given by an implicit relation. I first investigated the function with different parameters, and the function has a horizontal asymptote that depends on $\gamma$ and $n$. $\alpha$ determines how fast the function increases. This means that, for some sets of parameters, $\beta(u)$ never exceeds $2 \gamma$, which means the system can never oscillate.
+Another important point is the function $\beta(u)$. It's hard to tell what it looks like just by looking at it, considering $P_{eq}$ is itself a function of $u$ given by an implicit relation. I first investigated the function with different parameters, and the function has a horizontal asymptote that depends on $\gamma$ and $n$. $\alpha$ determines how fast the function increases. This means that, for some sets of parameters, $\beta(u)$ never exceeds $2 \gamma$, which means the system can never oscillate. 
+
+To prove this, we determine $\lim\limits_{u \to \infty}\beta(u)$. For this we need to determine $\lim\limits_{u \to \infty}P_{eq}(u)$. We know that $\gamma P_{eq} (1 + P_{eq}^n) = u \alpha$. Assume $P_{eq}$ is bounded above by $M, M \in ℝ$. The left sign of the equation is then bounded by $\gamma M (1 + M^n)$ as the right side goes to infinity as $u \to \infty$, which creates a contradiction. Therefore, $\lim\limits_{u \to \infty}P_{eq}(u) = \infty$. We can then substitute $u$
+
+$$\beta = u \frac{\alpha n P_{eq}^{n-1}}{(1 + P_{eq}^n)^2} = \frac{\gamma}{\alpha} P_{eq} (1 + P_{eq}^n) \frac{\alpha n P_{eq}^{n-1}}{(1 + P_{eq}^n)^2} = \frac{\gamma n P_{eq}^n}{1 + P_{eq}} $$
+
+$$\lim\limits_{u \to \infty}\beta(u) = \lim\limits_{P_{eq} \to \infty} \frac{\gamma n P_{eq}^n}{1 + P_{eq}}$$ can then easily be seen to be $\gamma n$, which means for $n<2$, the system will exist below the Hopf bifurcation boundary no matter the control input, and will never be able to maintain its oscillations.
 
 <img width="582" height="455" alt="image" src="https://github.com/user-attachments/assets/3cdacf6b-914c-4fbb-8be5-58fb17aaf43e" />
 
-We can then determine the region in parameter space for which the system under control can oscillate and where it cannot.
+However, this does not mean that, for our system, we can reach non-decaying oscillations for every set of parameters as long as $n>2$, since our control is bounded by 5, which correspond to a 5-fold increase in protein production. We can then determine the region in parameter space for which the system under control can oscillate and where it cannot.
 
 <img width="1572" height="746" alt="image" src="https://github.com/user-attachments/assets/89733115-eb65-4584-bda2-ffc0d6031821" />
 
@@ -68,7 +74,7 @@ We can use Fast Fourier Transform to characterize how the system oscillates and 
 
 <img width="622" height="547" alt="image" src="https://github.com/user-attachments/assets/bcf0cce7-51ec-441d-b753-e0b5e717a4a9" />
 
-Although the controller is able to maintain the oscillations, all it does is actually maintain the control at the critical value, and simply computing the critical value and making it a constant leads to the same behaviour. However, the model might be imperfect, and the parameters might change. Using the initial critical value as a constant leads to slight decay of the oscillations, although the system does manage to maintain its oscillatory behaviour. 
+Although the controller is able to maintain the oscillations, all it does is actually maintain the control at the critical value, and simply computing the critical value and making it a constant leads to the same behaviour. However, the model might be imperfect, and the parameters might change. Using the initial critical value as a constant in a noisy simulation leads to slight decay of the oscillations, although the system does manage to maintain its oscillatory behaviour. 
 
 <img width="567" height="455" alt="image" src="https://github.com/user-attachments/assets/a4efeea3-adb7-4ba5-a4dc-8f112dc68ca3" />
 
