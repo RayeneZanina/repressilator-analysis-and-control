@@ -84,8 +84,8 @@ The regime indicator shows a much more stable regime, in the sense that it becom
 
 <img width="587" height="455" alt="image" src="https://github.com/user-attachments/assets/51c2a765-121d-48b7-b191-eefe7beb32e7" />
 
-
-
+Reference I used: 
+J. Bois and M. Elowitz, “Blinking bacteria: The repressilator enables self-sustaining oscillations,” Caltech.edu, 2019. http://be150.caltech.edu/2019/handouts/08_repressilator.html.
 
 
 
