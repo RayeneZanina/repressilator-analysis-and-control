@@ -1,7 +1,7 @@
 # Analysis of synthetic repressilator system under regime control
 
 
-This project studies the dynamics of a synthetic repressilator gene circuit under external control input \(u(t)\), and analyzes how feedback control can regulate oscillatory behavior near a Hopf bifurcation.
+This project studies the dynamics of a synthetic repressilator gene circuit under external control input \(u(t)\) first in a symmetric system, then in an assymetric 1-control system, and analyzes how feedback control can regulate oscillatory behavior near a Hopf bifurcation.
 
 For this project, we analyze a 3-gene repressilator system with control input $\(u(t)\)$:
 
@@ -89,6 +89,43 @@ Now, we add the controller. We notice that the system is able to maintain its os
 The regime indicator shows a much more stable regime, in the sense that it becomes negative less often and stays closer to $r_{target}$
 
 <img width="587" height="455" alt="image" src="https://github.com/user-attachments/assets/51c2a765-121d-48b7-b191-eefe7beb32e7" />
+
+This system however isn't really interesting from a biological standpoint. A setup where all proteins are controlled by the same control is unrealistic. A more interesting and more complex system is then studied. We imagine that $P_1$ regulates a target protein that we want to make oscillate, but we can only control $P_3$. We can then model the system as follows:
+
+$\dot{P}_1 =\frac{\alpha}{1 + P_3^n} - \gamma P_1$
+
+$\dot{P}_2 =\frac{\alpha}{1 + P_1^n}- \gamma P_2$
+
+$\dot{P}_3 =u(t) \frac{\alpha}{1 + P_2^n}- \gamma P_3$
+
+The system is no longer symmetric, so we need to solve the system:
+
+$\frac{\alpha}{1 + P_3^n} = \gamma P_1$
+
+$\frac{\alpha}{1 + P_1^n} = \gamma P_2$
+
+$u(t) \frac{\alpha}{1 + P_2^n} = \gamma P_3$
+
+The solution can be determined numerically (assuming there is a solution). We can now linearize the system similarly to how we approached the first system. We use a similar definition for $\beta$ : $\beta(P_{eq}) = \frac{\alpha n P_{eq}^{n-1}}{(1 + P_{eq}^n)^2}$, with $\beta_1 = \beta(P_{eq,1})$
+
+We obtain the linear system $\delta \dot{x} = J(x_{eq}) \delta x$ with 
+
+$$
+J =
+\begin{bmatrix}
+-\gamma & 0 & -\beta_1 \\
+-\beta_2 & -\gamma & 0 \\
+0 & -u\beta_3 & -\gamma
+\end{bmatrix}
+$$
+
+We determine the eigenvalues of the matrix. We obtain $\lambda + \gamma = (-u \beta_1 \beta_2 \beta_3)^{\frac{1}{3}}$
+
+We obtain the following eigenvalues $\lambda_k = -\gamma + (u \beta_1 \beta_2 \beta_3)^{\frac{1}{3}} e^{i\frac{(2k+1)\pi}{3}}, k = 0, 1, 2$
+
+Similarly to the previous system, $\lambda_1 = -\gamma - (u \beta_1 \beta_2 \beta_3)^{\frac{1}{3}}$ is real, and $\lambda_{0,2} = -\gamma + \frac{1}{2} (u \beta_1 \beta_2 \beta_3)^{\frac{1}{3}} \pm i \frac{\sqrt{3}}{2} (u \beta_1 \beta_2 \beta_3)^{\frac{1}{3}}$ 
+
+The Hopf bifurcation boundary occurs then at $\Re(\lambda_{0,2}) = 0$, which leads to the equation $u \beta_1 \beta_2 \beta_3 = 8 \gamma^3$. This the asymmetric version of the critical value for the first system.
 
 Reference I used: 
 J. Bois and M. Elowitz, “Blinking bacteria: The repressilator enables self-sustaining oscillations,” Caltech.edu, 2019. http://be150.caltech.edu/2019/handouts/08_repressilator.html.
