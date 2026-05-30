@@ -15,7 +15,7 @@ Note that, we assume the control input changes the rate at which the protein is 
 
 We define $x = \[P_1, P_2, P_3\]$. Therefore, $x = f(x, u)$
 
-To find the equilibrium points, we assume symmetry $P_{eq} = P_1 = P_2 = P_3$
+To find the equilibrium points, we assume symmetry $P_{eq} = P_1 = P_2 = P_3$. We simply need to solve $u(t) \frac{\alpha}{1 + P_{eq}^n} - \gamma P_{eq} = 0$. We can demonstrate a solution exists using the Intermediate Value theorem by setting $f(P) = u \frac{\alpha}{1 + P^n} - \gamma P$. $f$ is continuous on the interval $[0,\infty)$ with $f(0) = u\alpha > 0$ and $\lim\limits_{P \to \infty}f(P) = -\infty < 0$. Therefore, there exists a solution to the equation $f(P) = 0$. The solution can be determined numerically.
 
 The equilibrium points are then given by the implicit relation $\gamma P_{eq} (1 + P_{eq}^n) = u(t) \alpha$. We note that $P_{eq}$ is a function of $u(t)$.
 
@@ -90,7 +90,9 @@ The regime indicator shows a much more stable regime, in the sense that it becom
 
 <img width="587" height="455" alt="image" src="https://github.com/user-attachments/assets/51c2a765-121d-48b7-b191-eefe7beb32e7" />
 
-This system however isn't really interesting from a biological standpoint. A setup where all proteins are controlled by the same control is unrealistic. A more interesting and more complex system is then studied. We imagine that $P_1$ regulates a target protein that we want to make oscillate, but we can only control $P_3$. We can then model the system as follows:
+To conclude on the PID controller for this system, it has two main functions. First, it expands the region in parameter space where the system can maintain its oscillations by changing the control input ($u\alpha$ can be viewed as one parameter $\alpha'$ with a wider range of values). Second, the controller is able to dynamically change its input in response to a change in the parameter values used in the model.
+
+This system however isn't really interesting from a biological standpoint. A setup where all proteins are controlled by the same control is unrealistic. A more interesting and more complex system is then studied. We imagine that $P_1$ is the target protein that we want to make oscillate, but we can only control $P_3$. We can then model the system as follows:
 
 $\dot{P}_1 =\frac{\alpha}{1 + P_3^n} - \gamma P_1$
 
@@ -106,7 +108,17 @@ $\frac{\alpha}{1 + P_1^n} = \gamma P_2$
 
 $u(t) \frac{\alpha}{1 + P_2^n} = \gamma P_3$
 
-The solution can be determined numerically (assuming there is a solution). We can now linearize the system similarly to how we approached the first system. We use a similar definition for $\beta$ : $\beta(P_{eq}) = \frac{\alpha n P_{eq}^{n-1}}{(1 + P_{eq}^n)^2}$, with $\beta_1 = \beta(P_{eq,1})$
+Since we can't use symmetry, we must use a different approach to show that there exists a solution. We define the vector-valued function $f(x) = \[f_1(x), f_2(x), f_3(x)\]$ with $x = \[P_1, P_2, P_3\]$ such that 
+
+$f_1(x) = \frac{\alpha}{\gamma (1 + P_3^n)}$
+
+$f_2(x) = \frac{\alpha}{\gamma (1 + P_1^n)}$
+
+$f_3(x) = u(t) \frac{\alpha}{\gamma (1 + P_2^n)}$
+
+We note that $f$ is continuous, and $0 < f_1(x) \leq  \frac{\alpha}{\gamma}, 0 < f_2(x) \leq \frac{\alpha}{\gamma}, 0 < f_3(x) \leq u_{max}\frac{\alpha}{\gamma}$ We can then define the set  $K = \[0, \frac{\alpha}{\gamma}\] \times \[0, \frac{\alpha}{\gamma}\] \times \[0, u_{max}\frac{\alpha}{\gamma}\]$. $K$ is a closed and bounded cubic subset of $ℝ^3_+$, making it convex and compact. By construction, $f(ℝ^3_+) \subseteq K$, and $K \subseteq ℝ^3_+$, meaning $f(K) \subseteq K$. Using the Brouwer's fixed point theorem, we can then conclude that there exists a solution to the equation $f(x) = x$. The solution can then be determined numerically
+
+We can now linearize the system similarly to how we approached the first system. We use a similar definition for $\beta$ : $\beta(P_{eq}) = \frac{\alpha n P_{eq}^{n-1}}{(1 + P_{eq}^n)^2}$, with $\beta_1 = \beta(P_{eq,1})$
 
 We obtain the linear system $\delta \dot{x} = J(x_{eq}) \delta x$ with 
 
