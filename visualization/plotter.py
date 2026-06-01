@@ -108,3 +108,31 @@ def target_oscillation_plot(target_values, dom_freqs, amps):
     ax2.set_ylabel("Oscillation Amplitude")
     ax.set_title("Target Regime vs Dominant Frequency and Oscillation Amplitude")
     plt.show()
+
+def hopf_comparison(model, states, u_values):
+    gamma = model.gamma
+
+    real_num = []
+    real_theoretical = []
+    for i in range(len(u_values)):
+        state = states[i, :]
+        u = u_values[i]
+
+        eigs = model.eigenvalues(state, u)
+
+        real_num.append(np.real(eigs[np.argmax(np.imag(eigs))]))
+
+        beta = model.beta(u)
+        real_theoretical.append(-gamma + beta / 2)
+    
+    real_num = np.array(real_num)
+    real_theoretical = np.array(real_theoretical)
+
+    plt.plot(real_num, label = 'Numerical real part')
+    plt.plot(real_theoretical, label = 'Analytical real part', alpha=0.5)
+    plt.xlabel('Time step')
+    plt.ylabel('Real part')
+    plt.legend()
+    plt.grid()
+    plt.title('Analytical vs numerical eigenvalue real part')
+
