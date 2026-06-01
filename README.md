@@ -42,6 +42,20 @@ We note that $\lambda_1 = -\gamma -\beta(u)$ is real, and $\lambda_{0,2} = -\gam
 
 An important thing to note is that, since we have introduced time-varying control, the parameter $\beta$ is now a function of time and and subsequently eigenvalues evolve through time. This leads to local time-varying stability regimes relative to the Hopf bifurcation threshold.
 
+To determine whether we can generalize the conclusion from the linearization near the equilibrium points to the entire system, we use an oscillation detector and compare its results to the hopf bifurcation boundary condition in a confusion matrix. 
+
+<img width="744" height="455" alt="image" src="https://github.com/user-attachments/assets/928a60f4-5f75-484f-ba82-b27d4dae05d9" />
+
+We can see that the linearization sometimes falsely predicts an oscillatory behaviour and displays a F1-score of 0.58. To try to understand this phenomenon, we can plot the points in parameter space for false positives and true negatives.
+
+<img width="1587" height="855" alt="image" src="https://github.com/user-attachments/assets/242686ad-ce91-456e-a5e3-6f7fc284af87" />
+
+We can see that the linearization doesn't generalize well for points with low $n$ and high $\alpha$, or for high $n$ and $\alpha \approx \gamma$. One way to explain this is that, for those parameters, the non-linearity of the model is more important, making the linearization less reliable. The linearization works well with the rest of the points. In the rest of the work, we study the Hopf condition, but we must keep in mind the regions where it isn't reliable. 
+
+We first look at the system before any control input to try to determine the Hopf bifurcation boundary of the system.
+
+<img width="1572" height="746" alt="image" src="https://github.com/user-attachments/assets/1834be99-0e52-43e0-9415-4103c6308c7f" />
+
 The controller will then try to keep the regime close to the Hopf bifurcation boundary, slightly above it so that the oscillations do not die out. For this, we use a PID controller. Note that this controller will be regulating the parameter $u$, and has access to information directly from the system that is not accessible in real conditions. There might be ways to infer the parameters from the evolution of the system, or design a control law that doesn't need the information, but for now I just want to see if there is a way to control systems to produce an oscillatory behaviour. 
 
 For the PID, we define a quantity for the regime $r(u) = \beta(u) - 2 \gamma$. The controller gets this information from the system, which again is not possible, but we will accept this for now. The error is then defined as $e = r(u) - r_{target}$ where $r_{target}$ can be manually decided, but should be positive and small. Note that, we are using the equation we derived that characterizes the regime, but it is only an approximation. That equation is only valid locally near the equilibrium point, but away from that point, the non-linearity makes the system less predictable. 
@@ -138,6 +152,25 @@ We obtain the following eigenvalues $\lambda_k = -\gamma + (u \beta_1 \beta_2 \b
 Similarly to the previous system, $\lambda_1 = -\gamma - (u \beta_1 \beta_2 \beta_3)^{\frac{1}{3}}$ is real, and $\lambda_{0,2} = -\gamma + \frac{1}{2} (u \beta_1 \beta_2 \beta_3)^{\frac{1}{3}} \pm i \frac{\sqrt{3}}{2} (u \beta_1 \beta_2 \beta_3)^{\frac{1}{3}}$ 
 
 The Hopf bifurcation boundary occurs then at $\Re(\lambda_{0,2}) = 0$, which leads to the equation $u \beta_1 \beta_2 \beta_3 = 8 \gamma^3$. This the asymmetric version of the critical value for the first system.
+
+Due to the asymmetry of the system, $\beta$ for the different proteins evolve differently with respect to $u$. This means the regime indicator doesn't simply increase as $u$ increases, and we need to find $u_c$ to reach the target regime. This makes the parameter sweep more expensive computationally. To find regions where the system doesn't normally oscillate, but we can introduce oscillations with control (without simulating for too long), we first sweep for 25x25x25 parameters, then use KNN to smoothen out the region. To prevent data imbalance since there are more points that don't oscillate, we take points where control introduces oscillations and add small perturbations. We also add more points around the boundary of the prediction to smoothen out the edges. We then pass the probability through a sigmoid function for the opacity for the visualization (the region lies right behind the native system Hopf bifurcation boundary, but it's hard to see at first).
+
+<img width="957" height="820" alt="image" src="https://github.com/user-attachments/assets/a97ee0c9-38ad-4694-9802-8b38a9e90751" />
+
+We can then take a new system before any control input within this region.
+
+<img width="567" height="455" alt="image" src="https://github.com/user-attachments/assets/658d0cfe-3dd4-4915-a935-f9813f9a6911" />
+
+We can then introduce the controller to introduce the oscillations.
+
+<img width="576" height="455" alt="image" src="https://github.com/user-attachments/assets/cd3bbc67-08cb-4fbf-b9a2-0e3848dd7ea3" />
+
+<img width="2396" height="855" alt="image" src="https://github.com/user-attachments/assets/cabd497c-eae7-4f70-abf8-069f1c47b16b" />
+
+We notice that because of the asymmetry, the proteins oscillate around different equilibrium values, but they all exhibit the same amplitude and dominant frequency.
+
+
+
 
 Reference I used: 
 J. Bois and M. Elowitz, “Blinking bacteria: The repressilator enables self-sustaining oscillations,” Caltech.edu, 2019. http://be150.caltech.edu/2019/handouts/08_repressilator.html.
