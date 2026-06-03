@@ -153,9 +153,9 @@ Similarly to the previous system, $\lambda_1 = -\gamma - (u \beta_1 \beta_2 \bet
 
 The Hopf bifurcation boundary occurs then at $\Re(\lambda_{0,2}) = 0$, which leads to the equation $u \beta_1 \beta_2 \beta_3 = 8 \gamma^3$. This the asymmetric version of the critical value for the first system.
 
-Due to the asymmetry of the system, $\beta$ for the different proteins evolve differently with respect to $u$. This means the regime indicator doesn't simply increase as $u$ increases, and we need to find $u_c$ to reach the target regime. This makes the parameter sweep more expensive computationally. To find regions where the system doesn't normally oscillate, but we can introduce oscillations with control (without simulating for too long), we first sweep for 25x25x25 parameters, then use KNN to smoothen out the region. To prevent data imbalance since there are more points that don't oscillate, we take points where control introduces oscillations and add small perturbations. We also add more points around the boundary of the prediction to smoothen out the edges. We then pass the probability through a sigmoid function for the opacity for the visualization (the region lies right behind the native system Hopf bifurcation boundary, but it's hard to see at first).
+Due to the asymmetry of the system, $\beta$ for the different proteins evolve differently with respect to $u$. This means the regime indicator doesn't simply increase as $u$ increases, and we need to find $u_c$ to reach the target regime. This makes the parameter sweep more expensive computationally. To find regions where the system doesn't normally oscillate, but we can introduce oscillations with control (without simulating for too long), we first sweep for 25x25x25 parameters, then use KNN to smoothen out the region. To prevent data imbalance since there are more points that don't oscillate, we take points where control introduces oscillations and add small perturbations. We also add more points around the boundary of the prediction to smoothen out the edges. We then pass the probability through a sigmoid function for the opacity for the visualization. We check for oscillations rather than using the regime indicator as we saw it isn't very reliable.
 
-<img width="957" height="820" alt="image" src="https://github.com/user-attachments/assets/a97ee0c9-38ad-4694-9802-8b38a9e90751" />
+<img width="957" height="820" alt="image" src="https://github.com/user-attachments/assets/1b0b0c27-495f-47bd-988b-e087e06467c2" />
 
 We can then take a new system before any control input within this region.
 
@@ -169,6 +169,9 @@ We can then introduce the controller to introduce the oscillations.
 
 We notice that because of the asymmetry, the proteins oscillate around different equilibrium values, but they all exhibit the same amplitude and dominant frequency.
 
+Adding control is also able to recover oscillations if added after a latency.
+
+<img width="576" height="455" alt="image" src="https://github.com/user-attachments/assets/91f62ceb-5bfb-46d6-8e96-741c03b42b70" />
 
 
 
