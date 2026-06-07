@@ -13,7 +13,7 @@ $\dot{P}_3 =u(t) \frac{\alpha}{1 + P_2^n}- \gamma P_3$
 
 Note that, we assume the control input changes the rate at which the protein is produced in a multiplicative way. We assume the control is between 0.2 and 5. 
 
-We define $x = \[P_1, P_2, P_3\]$. Therefore, $x = f(x, u)$
+We define $x = \[P_1, P_2, P_3\]$. Therefore, $\dot{x} = f(x, u)$
 
 To find the equilibrium points, we assume symmetry $P_{eq} = P_1 = P_2 = P_3$. We simply need to solve $u(t) \frac{\alpha}{1 + P_{eq}^n} - \gamma P_{eq} = 0$. We can demonstrate a solution exists using the Intermediate Value theorem by setting $f(P) = u \frac{\alpha}{1 + P^n} - \gamma P$. $f$ is continuous on the interval $[0,\infty)$ with $f(0) = u\alpha > 0$ and $\lim\limits_{P \to \infty}f(P) = -\infty < 0$. Therefore, there exists a solution to the equation $f(P) = 0$. The solution can be determined numerically.
 
